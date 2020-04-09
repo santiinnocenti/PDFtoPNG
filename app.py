@@ -7,18 +7,18 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def PdfToPng(): 
-    pdffile = 'pdf-sample.pdf'
+    pdffile = 'PDFSample-3pages.pdf'
     doc = fitz.open(pdffile)
-    page = doc.loadPage(0) #number of page
-    #zoom page
-    zoom_x = 10.0
-    zoom_y = 10.0
-    mat = fitz.Matrix(zoom_x, zoom_y)
-    pix = page.getPixmap(matrix = mat)
-    #pix = page.getPixmap()
-    output = "outfile.png"
-    pix.writePNG(output)
-    
+    for x in doc:
+        page = doc.loadPage(x.number) #number of page
+        #zoom pages
+        zoom_x = 10.0
+        zoom_y = 10.0
+        mat = fitz.Matrix(zoom_x, zoom_y)
+        pix = page.getPixmap(matrix = mat)
+        #pix = page.getPixmap()
+        output = "outfile%s.png"%(x.number)
+        pix.writePNG(output)
     return jsonify({"Termino": True})
 
 def main(): 
